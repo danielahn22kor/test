@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <fstream>
-#include "pt.h"
+#include "protocol_hostap.h"
 #include <iostream>
 
 
@@ -53,9 +53,9 @@ int hostap::stop()
 void hostap::restart()
 {
 	if(this->status == "ON")
-		ap->reboot();
+		this->reboot();
 	else
-		ap->rebuildConf();
+		this->rebuildConf();
 }
 
 void hostap::reboot()
@@ -64,6 +64,14 @@ void hostap::reboot()
 	this->rebuildConf();
 	sleep(1);
 	this->start();
+}
+
+bool hostap::isNotComment(string in)
+{
+	if(in[0] =! '#')
+		return true;
+	else
+		return false;
 }
 
 void hostap::rebuildConf()
@@ -109,8 +117,11 @@ void hostap::rebuildConf()
 		while(!in.eof())
 		{
 			getline(in, buf);
-			if(this->isNotConfMember(buf))
-				out << buf << endl;
+			if(this->isNotComment(buf))
+			{
+				if(this->isNotConfMember(buf))
+					out << buf << endl;
+			}
 		}
 	}
 
@@ -134,61 +145,48 @@ void hostap::readConf()
 		while(!in.eof())
 		{
 			getline(in, temp);
-			if( (temp.find("interface=w") != std::string::npos))
+			if(this->isNotComment(temp))
 			{
-				this->ap_conf.interface = temp.substr(10);
-			}
-			else if(temp.find("bridge") != std::string::npos)
-			{
-				if(temp[0] == '#')
+				if( (temp.find("interface=w") != std::string::npos))
 				{
-					this->ap_conf.isBridge = false;
-					this->ap_conf.bridge = temp.substr(8);
+					this->ap_conf.interface = temp.substr(10);
 				}
-				else
+				else if(temp.find("bridge") != std::string::npos)
 				{
 					this->ap_conf.isBridge = true;
 					this->ap_conf.bridge = temp.substr(7);
 				}
-			}
-			else if(temp.find("wpa_passphrase") != std::string::npos)
-			{
-				if(temp[0] == '#')
-				{
-					this->ap_conf.isPwd = false;
-					this->ap_conf.pwd = temp.substr(16);
-				}
-				else
+				else if(temp.find("wpa_passphrase") != std::string::npos)
 				{
 					this->ap_conf.isPwd = true;
 					this->ap_conf.pwd = temp.substr(15);
 				}
-			}
-			else if(temp.find("ignore_broadcast_ssid") != std::string::npos)
-			{
-				string tsr = temp.substr(22);
-				if(tsr == "0")
+				else if(temp.find("ignore_broadcast_ssid") != std::string::npos)
 				{
-					this->ap_conf.isHide = false;
-					this->ap_conf.hide = "0";
+					string tsr = temp.substr(22);
+					if(tsr == "0")
+					{
+						this->ap_conf.isHide = false;
+						this->ap_conf.hide = "0";
+					}
+					else
+					{
+						this->ap_conf.isHide = true;
+						this->ap_conf.hide= "1";
+					}
 				}
-				else
+				else if(temp.find("ssid") != std::string::npos)
 				{
-					this->ap_conf.isHide = true;
-					this->ap_conf.hide= "1";
+					this->ap_conf.ssid = temp.substr(5);
 				}
-			}
-			else if(temp.find("ssid") != std::string::npos)
-			{
-				this->ap_conf.ssid = temp.substr(5);
-			}
-			else if(temp.find("channel") != std::string::npos)
-			{
-				this->ap_conf.channel = temp.substr(8);
-			}
-			else if(temp.find("hw_mode") != std::string::npos)
-			{
-				this->ap_conf.hw_mode = temp.substr(8);
+				else if(temp.find("channel") != std::string::npos)
+				{
+					this->ap_conf.channel = temp.substr(8);
+				}
+				else if(temp.find("hw_mode") != std::string::npos)
+				{
+					this->ap_conf.hw_mode = temp.substr(8);
+				}
 			}
 
 		}
@@ -210,9 +208,15 @@ bool hostap::isNotConfMember(string in)
 
 }
 
-void hostap::set_interface(string interface)
+bool hostap::set_interface(string interface)
 {
-	this->ap_conf.interface = interface;
+	if((interface.find("wlan")) != std::string::npos)
+	{
+		this->ap_conf.interface = interface;
+		return true;	
+	}
+	else
+		return false;
 }
 
 string hostap::get_interface()
@@ -220,9 +224,15 @@ string hostap::get_interface()
 	return this->ap_conf.interface;
 }
 
-void hostap::set_bridge(string brg)
+bool hostap::set_bridge(string brg)
 {
-	this->ap_conf.bridge = brg;
+	if((brg.find("br")) != std::string::npos)
+	{
+		this->ap_conf.bridge = brg;
+		return true;
+	}
+	else
+		return false;
 }
 
 string hostap::get_bridge()
@@ -230,9 +240,16 @@ string hostap::get_bridge()
 	return this->ap_conf.bridge;
 }
 
-void hostap::set_ssid(string ssid)
+bool hostap::set_ssid(string ssid)
 {
-	this->ap_conf.ssid = ssid;
+	int length = ssid.length();
+	if(length > 0)
+	{
+		this->ap_conf.ssid = ssid;
+		return true;
+	}
+	else
+		return false;
 }
 
 string hostap::get_ssid()
@@ -240,9 +257,16 @@ string hostap::get_ssid()
 	return this->ap_conf.ssid;
 }
 
-void hostap::set_pwd(string pwd)
+bool hostap::set_pwd(string pwd)
 {
-	this->ap_conf.pwd = pwd;
+	int length = pwd.length();
+	if(length >= 8)
+	{
+		this->ap_conf.pwd = pwd;
+		return true;
+	}
+	else
+		return false;
 }
 
 void hostap::pwd_on()
@@ -253,6 +277,7 @@ void hostap::pwd_on()
 void hostap::pwd_off()
 {
 	this->ap_conf.isPwd = false;
+	this->ap_conf.pwd = "";
 }
 
 string hostap::get_pwd()
@@ -260,13 +285,20 @@ string hostap::get_pwd()
 	return this->ap_conf.pwd;
 }
 
-void hostap::set_hide(string hide)
+bool hostap::set_hide(string hide)
 {
-	if(hide == "0")
-		this->ap_conf.isHide=false;
+	if(hide == "0" || hide == "1")
+	{
+		if(hide == "0")
+			this->ap_conf.isHide=false;
+		else
+			this->ap_conf.isHide=true;
+		this->ap_conf.hide = hide;
+
+		return true;
+	}
 	else
-		this->ap_conf.isHide=true;
-	this->ap_conf.hide = hide;
+		return false;
 }
 
 string hostap::get_hide()
@@ -274,28 +306,43 @@ string hostap::get_hide()
 	return this->ap_conf.hide;
 }
 
-void hostap::set_channel(string chl)
+bool hostap::set_channel(string chl)
 {
-	this->ap_conf.channel = chl;
+	int channel = atoi(chl.c_str());
+	if( channel > 0 && channel < 12)
+	{
+		this->ap_conf.channel = chl;
+		return true;
+	}
+	else
+		return false;
+
 }
+
 string hostap::get_channel()
 {
 	return this->ap_conf.channel;
 }
 
-void hostap::set_hwmode(string mode)
+bool hostap::set_hwmode(string mode)
 {
-	this->ap_conf.hw_mode = mode;
+	if(mode == "g" || mode =="n")
+	{
+		this->ap_conf.hw_mode = mode;
+		return true;
+	}
+	else
+		return false;
 }
 string hostap::get_hwmode()
 {
 	return this->ap_conf.hw_mode;
 }
-
 string hostap::get_status()
 {
 	return this->status;
 }
+
 void hostap::print()
 {
 	 std::cout << "interface: " << this->ap_conf.interface << std::endl;

@@ -38,26 +38,36 @@ void process_command(Message& cmd)
 	case GET_STATUS:
 		break;
 	case CHANGE_SSID:
-		ap->set_ssid(string(cmd.param));
-		ap->restart();
+		
+		if(isSuccess = ap->set_ssid(string(cmd.param)))
+			ap->restart();
+		else
+			errorM = "SSID must be over 1 character\n";
 		break;
 	case CHANGE_PWD:
-		ap->pwd_on();
-		ap->set_pwd(string(cmd.param));
-		ap->restart();
+		if(isSuccess = ap->set_pwd(string(cmd.param)))
+		{
+			ap->pwd_on();
+			ap->restart();
+		}
+		else
+			errorM = "Password must be over 8 characters\n";
 		break;
 	case OFF_PWD:
 		ap->pwd_off();
-		ap->set_pwd(string(cmd.param));
 		ap->restart();
 		break;
 	case CHANGE_CHANNEL:
-		ap->set_channel(string(cmd.param));
-		ap->restart();
+		if(isSuccess = ap->set_channel(string(cmd.param)))
+			ap->restart();
+		else
+			errorM = "Channel must be in range ( 1 ... 11 )\n";
 		break;
 	case CHANGE_MODE:
-		ap->set_hwmode(string(cmd.param));
-		ap->restart();
+		if(isSuccess = ap->set_hwmode(string(cmd.param)))
+			ap->restart();
+		else
+			errorM = "Mode must be 'g' or 'n'\n";
 		break;
 	case CHANGE_HIDE:
 		ap->set_hide(string(cmd.param));
@@ -66,19 +76,24 @@ void process_command(Message& cmd)
 	default:
 		break;
 	}
-	cmd.type = ACK;
-	sprintf(cmd.param, "\nSTATUS: %s\nSSID: %s\nCHANNEL: %s\nMODE: %s\n", (ap->get_status()).c_str(), (ap->get_ssid()).c_str(), (ap->get_channel()).c_str(), (ap->get_hwmode()).c_str());
-	
-	if(ap->isPwd())
-	{
-		string temp;
-		temp = boost::str(boost::format("password: %s\n") % ap->get_pwd());
 
-		strcat(cmd.param, temp.c_str());
+	cmd.type = ACK;
+	if(isSuccess)
+	{
+		sprintf(cmd.param, "\nSTATUS: %s\nSSID: %s\nCHANNEL: %s\nMODE: %s\n", (ap->get_status()).c_str(), (ap->get_ssid()).c_str(), (ap->get_channel()).c_str(), (ap->get_hwmode()).c_str());
+
+		if(ap->isPwd())
+		{
+			string temp;
+			temp = boost::str(boost::format("password: %s\n") % ap->get_pwd());
+
+			strcat(cmd.param, temp.c_str());
+		}
+		if(ap->isHide())
+			strcat(cmd.param, "Hide: true\n");
 	}
-	if(ap->isHide())
-		strcat(cmd.param, "Hide: true\n");
-		
+	else
+		strcpy(cmd.param, errorM.c_str());
 }
 
 void session(socket_ptr sock)
