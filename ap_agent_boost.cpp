@@ -22,14 +22,6 @@ typedef boost::shared_ptr<tcp::socket> socket_ptr;
 
 hostap* ap;
 
-void reboot()
-{
-	if(ap->get_status() == "ON")
-		ap->restart();
-	else
-		ap->rebuildConf();
-}
-
 void process_command(Message& cmd)
 {
 	switch(cmd.type)
@@ -44,29 +36,29 @@ void process_command(Message& cmd)
 		break;
 	case CHANGE_SSID:
 		ap->set_ssid(string(cmd.param));
-		reboot();
+		ap->restart();
 		break;
 	case CHANGE_PWD:
 		ap->pwd_on();
 		ap->set_pwd(string(cmd.param));
-		reboot();
+		ap->restart();
 		break;
 	case OFF_PWD:
 		ap->pwd_off();
 		ap->set_pwd(string(cmd.param));
-		reboot();
+		ap->restart();
 		break;
 	case CHANGE_CHANNEL:
 		ap->set_channel(string(cmd.param));
-		reboot();
+		ap->restart();
 		break;
 	case CHANGE_MODE:
 		ap->set_hwmode(string(cmd.param));
-		reboot();
+		ap->restart();
 		break;
 	case CHANGE_HIDE:
 		ap->set_hide(string(cmd.param));
-		reboot();
+		ap->restart();
 		break;
 	default:
 		break;

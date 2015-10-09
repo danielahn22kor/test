@@ -32,7 +32,8 @@ public:
 	hostap(char * confPath);	//Constructor using conf path(char *)
 	int start();			//Start hostapd 
 	int stop();			//Stop hostapd
-	void restart();			//Restart hostapd
+	void restart();			//Restart or Rebuild hostapd
+	void reboot();			//Restart hostapd
 	void rebuildConf();		//Remake(rebuild) hostapd's conf file
 	void readConf();		//Read conf file and save at ap_conf
 	bool isNotConfMember(string in);//Boolean of ap_config structer's member

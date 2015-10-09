@@ -52,6 +52,14 @@ int hostap::stop()
 
 void hostap::restart()
 {
+	if(this->status == "ON")
+		ap->reboot();
+	else
+		ap->rebuildConf();
+}
+
+void hostap::reboot()
+{
 	this->stop();
 	this->rebuildConf();
 	sleep(1);
