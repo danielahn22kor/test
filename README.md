@@ -37,7 +37,18 @@ manager will be remote control to ap.
 
 ```
 Usage:
-
+Commands: 
+  help or h            show this usage help    
+  start                start hostap            
+  stop                 stop hostap             
+  status               show ap's status        
+  ssid <params>        change ssid             
+  password [params]    change password(if params blank, off password) 
+  channel <params>     change channel          
+  mode <g,b>           change mode             
+  hide <on, off>       broadcast on, off       
+  clear or cl          clear line              
+  quit                 exit this program   
 
 ```
 
