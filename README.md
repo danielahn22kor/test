@@ -11,7 +11,7 @@ _ _ _
 - [hostapd]
 - [c++ boost library(1.59)]
 
-#Before Starting...
+#Before Started
 _ _ _
 
 **YOU MUST INSTALL and CONFIGURE dhcpd, hostapd + Activate MASQUERADING**
