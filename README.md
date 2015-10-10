@@ -1,6 +1,8 @@
 #HOSTAPD REMOTE CONTROLLER
 _ _ _
 by Kyewan Ahn (MCLab Kyunghee Univercity)
+
+
 **C++ Program to make remote configuring hostapd.**
 
 #Dependencies
@@ -9,26 +11,28 @@ _ _ _
 - [hostapd]
 - [c++ boost library(1.59)]
 
-#Prepares
+#GETTING STARTED
 _ _ _
 
 **YOU MUST INSTALL and CONFIGURE dhcpd, hostapd + Activate MASQUERADING**
 
 
-#####OPEN /etc/sysctl.conf file
+OPEN /etc/sysctl.conf file
 `net.ipv4.ip_forward=1`
 
-#####OPEN /etc/rc.local
+OPEN /etc/rc.local
 ```
 /sbin/iptables -P FORWARD ACCEPT
 /sbin/iptables --table nat -A POSTROUTING -o (backbone interface ex: eth0) -j MASQUERADE
 ```
 
-#####INSTALL isc-dhcp-server, hostapd, bridge-utils, iw 
+INSTALL isc-dhcp-server, hostapd, bridge-utils, iw 
 
 `UBUNTU : $ apt-get install bridge-utils iw hostapd isc-dhcp-server`
 
+
 configure dhcp server interface. open /etc/default/isc-dhcp-server 
+
 `INTERFACES=(ap interface, ex: "wlan0")`
 
 #Usage
