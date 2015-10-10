@@ -11,13 +11,14 @@ _ _ _
 - [hostapd]
 - [c++ boost library(1.59)]
 
-#GETTING STARTED
+#Before Starting...
 _ _ _
 
 **YOU MUST INSTALL and CONFIGURE dhcpd, hostapd + Activate MASQUERADING**
 
 
 OPEN /etc/sysctl.conf file
+
 `net.ipv4.ip_forward=1`
 
 OPEN /etc/rc.local
