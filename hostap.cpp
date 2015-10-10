@@ -17,8 +17,6 @@ hostap::hostap(string confpath) : confPath(confpath)
 	this->ap_conf.isPwd = false;
 	this->ap_conf.isHide = false;
 	this->readConf();
-	this->print();
-	
 }
 
 hostap::hostap(char * confpath) : confPath(confpath)
@@ -28,7 +26,6 @@ hostap::hostap(char * confpath) : confPath(confpath)
 	this->ap_conf.isPwd = false;
 	this->ap_conf.isHide = false;
 	this->readConf();
-	this->print();
 }
 
 int hostap::start()
@@ -150,10 +147,8 @@ void hostap::readConf()
 			getline(in, temp);
 			if(this->isNotComment(temp))
 			{
-				cout << temp << endl;
 				if((temp.find("interface=w") != std::string::npos))
 				{
-					cout <<  temp.substr(10) << endl;
 					this->ap_conf.interface = temp.substr(10);
 				}
 				else if(temp.find("bridge") != std::string::npos)

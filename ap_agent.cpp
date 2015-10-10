@@ -30,10 +30,22 @@ void process_command(Message& cmd)
 	switch(cmd.type)
 	{
 	case START_AP:
-		ap->start();
+		if(ap->get_status() == "OFF")
+			ap->start();
+		else
+		{
+			isSuccess = false;
+			errorM = "hostapd already is running\n";
+		}
 		break;
 	case STOP_AP:
-		ap->stop();
+		if(ap->get_status() == "ON")
+			ap->stop();
+		else
+		{
+			isSuccess = false;
+			errorM = "hostapd is not running\n";
+		}
 		break;
 	case GET_STATUS:
 		break;

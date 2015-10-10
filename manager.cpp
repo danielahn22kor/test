@@ -87,7 +87,7 @@ Message& parse_CMD(string str)
 		cmd.type = GET_STATUS;
 		strcpy(cmd.param ,"");
 	}
-	else if(str.find("ssid") != std::string::npos)
+	else if((str.find("ssid") != std::string::npos) && (str.length() > 5))
 	{
 		cmd.type = CHANGE_SSID;
 		strcpy(cmd.param ,(str.substr(5)).c_str());
@@ -116,12 +116,12 @@ Message& parse_CMD(string str)
 			}
 		}
 	}
-	else if(str.find("channel") != std::string::npos)
+	else if((str.find("channel") != std::string::npos) && (str.length() > 8))
 	{
 		cmd.type = CHANGE_CHANNEL;
 		strcpy(cmd.param ,(str.substr(8)).c_str());
 	}
-	else if(str.find("hide") != std::string::npos)
+	else if((str.find("hide") != std::string::npos) && (str.length() > 5))
 	{
 		string temp;
 		temp = str.substr(5);
@@ -140,7 +140,7 @@ Message& parse_CMD(string str)
 			cout << "Invalid Request, Please See help" << endl;
 		}
 	}
-	else if(str.find("mode") != std::string::npos)
+	else if((str.find("mode") != std::string::npos) && (str.length() > 5))
 	{
 		cmd.type = CHANGE_MODE;
 		strcpy(cmd.param ,(str.substr(5)).c_str());
