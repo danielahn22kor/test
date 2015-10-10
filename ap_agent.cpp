@@ -67,7 +67,7 @@ void process_command(Message& cmd)
 		if(isSuccess = ap->set_hwmode(string(cmd.param)))
 			ap->restart();
 		else
-			errorM = "Mode must be 'g' or 'n'\n";
+			errorM = "Mode must be 'g' or 'b'\n";
 		break;
 	case CHANGE_HIDE:
 		ap->set_hide(string(cmd.param));

@@ -1,5 +1,5 @@
 CPP = g++
-BOOSTPATH = -I ./boost_1_59_0 
+BOOSTPATH = -I /lib/boost_1_59_0 
 LDFLAGS = libboost_system.a libboost_thread.a -lpthread
 
 .SUFFIXES : .cpp .o

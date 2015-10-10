@@ -17,6 +17,8 @@ hostap::hostap(string confpath) : confPath(confpath)
 	this->ap_conf.isPwd = false;
 	this->ap_conf.isHide = false;
 	this->readConf();
+	this->print();
+	
 }
 
 hostap::hostap(char * confpath) : confPath(confpath)
@@ -26,6 +28,7 @@ hostap::hostap(char * confpath) : confPath(confpath)
 	this->ap_conf.isPwd = false;
 	this->ap_conf.isHide = false;
 	this->readConf();
+	this->print();
 }
 
 int hostap::start()
@@ -68,7 +71,7 @@ void hostap::reboot()
 
 bool hostap::isNotComment(string in)
 {
-	if(in[0] =! '#')
+	if(in[0] != '#')
 		return true;
 	else
 		return false;
@@ -147,8 +150,10 @@ void hostap::readConf()
 			getline(in, temp);
 			if(this->isNotComment(temp))
 			{
-				if( (temp.find("interface=w") != std::string::npos))
+				cout << temp << endl;
+				if((temp.find("interface=w") != std::string::npos))
 				{
+					cout <<  temp.substr(10) << endl;
 					this->ap_conf.interface = temp.substr(10);
 				}
 				else if(temp.find("bridge") != std::string::npos)
@@ -326,7 +331,7 @@ string hostap::get_channel()
 
 bool hostap::set_hwmode(string mode)
 {
-	if(mode == "g" || mode =="n")
+	if(mode == "g" || mode =="b")
 	{
 		this->ap_conf.hw_mode = mode;
 		return true;

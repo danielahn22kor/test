@@ -45,7 +45,7 @@ void help()
 
 	cout <<"  " << setw(20) << left << "channel <params>" << setw(25) << setfill(' ') << " change channel " << endl;
 
-	cout <<"  " << setw(20) << left << "mode <g,n>" << setw(25) << setfill(' ') << " change mode " << endl;
+	cout <<"  " << setw(20) << left << "mode <g,b>" << setw(25) << setfill(' ') << " change mode " << endl;
 
 	cout <<"  " << setw(20) << left << "hide <on, off>" << setw(25) << setfill(' ') << " broadcast on, off " << endl;
 
@@ -197,7 +197,24 @@ int main(int argc, char* argv[])
 		cout << "For info, please contact to roy1022@hanamil.net " << endl << endl << endl;
 	
 
+		Message initM;
+		initM.type = GET_STATUS;
+		strcpy(initM.param , "");
 
+		size_t size = sizeof(initM);
+		boost::asio::write(*s, boost::asio::buffer((char *)&initM, size));
+
+		Message reply;
+		boost::system::error_code error;
+		size_t reply_length = boost::asio::read(*s, boost::asio::buffer((char *)&reply, sizeof(reply)));
+
+		if(error || (sizeof(reply) != reply_length))
+			throw boost::system::system_error(error);
+
+		if(reply.type == ACK)
+		{
+			std::cout << reply.param;
+		}
 		while(1)
 		{
 			std::cout << std::endl << argv[1] <<  "@ap manager> ";
@@ -213,14 +230,14 @@ int main(int argc, char* argv[])
 
 				Message reply;
 				boost::system::error_code error;
-				size_t reply_length = boost::asio::read(*s, boost::asio::buffer((char *)&cmd, sizeof(cmd)));
+				size_t reply_length = boost::asio::read(*s, boost::asio::buffer((char *)&reply, sizeof(reply)));
 
-				if(error || (sizeof(cmd) != reply_length))
+				if(error || (sizeof(reply) != reply_length))
 					throw boost::system::system_error(error);
 
-				if(cmd.type == ACK)
+				if(reply.type == ACK)
 				{
-					std::cout << cmd.param;
+					std::cout << reply.param;
 				}
 			}
 			bzero(request, max_length);
