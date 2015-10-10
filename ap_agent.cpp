@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
 		else
 			ap = new hostap("./openwinnet.conf"); // default confPath
 		cout << endl << endl << endl;
-		cout << "HostAP Manager Server v0.2" << endl;
+		cout << "HostAP Manager Server v0.3" << endl;
 		cout << "Copyright 2015 Kyung Hee University Mobile Convergence Lab" << endl;
 		cout << "All rights reserved." << endl;
 		cout << "For info, please contact to roy1022@hanamil.net " << endl << endl << endl;

@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
 		boost::asio::connect(*s, iterator);
 
 
-		cout << endl << endl << "HostAP Manager Client v0.2" << endl;
+		cout << endl << endl << "HostAP Manager Client v0.3" << endl;
 		cout << "Copyright 2015 Kyung Hee University Mobile Convergence Lab" << endl;
 		cout << "All rights reserved." << endl;
 		cout << "For info, please contact to roy1022@hanamil.net " << endl << endl << endl;
