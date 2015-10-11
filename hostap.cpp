@@ -43,7 +43,8 @@ int hostap::start()
 	system("dhcpd");
 
 	this->status = "ON";
-	return system("hostapd -dd ./openwinnet.conf -B");
+	ifconfBuf = boost::str(boost::format("hostapd -dd  %s -B") % this->confPath);
+	return system(ifconfBuf.c_str());
 
 }
 
