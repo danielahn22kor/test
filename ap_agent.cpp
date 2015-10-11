@@ -20,13 +20,23 @@ const int max_length = 1024;
 
 typedef boost::shared_ptr<tcp::socket> socket_ptr;
 
-hostap* ap;
+hostap* ap;			//AP object to control hostap
 
+
+/******************************
+ * in: cmd MessageType
+ * out: cmd.type, cmd.param will be changed
+ * des: Processing Command by cmd.type
+ * ****************************/
 void process_command(Message& cmd)
 {
 	bool isSuccess = true;
 	string errorM = "";
-
+	/**************************
+	 * process command by cmd.type
+	 * if there is error, ack messase will be error message
+	 * else, ack message will be status 
+	 * ************************/
 	switch(cmd.type)
 	{
 	case START_AP:
@@ -90,6 +100,7 @@ void process_command(Message& cmd)
 	}
 
 	cmd.type = ACK;
+	//if Error is not occured, make status message.
 	if(isSuccess)
 	{
 		sprintf(cmd.param, "\nSTATUS: %s\nSSID: %s\nCHANNEL: %s\nMODE: %s\n", (ap->get_status()).c_str(), (ap->get_ssid()).c_str(), (ap->get_channel()).c_str(), (ap->get_hwmode()).c_str());
@@ -118,6 +129,7 @@ void session(socket_ptr sock)
 
 			boost::system::error_code error;
 
+			//read message.
 			size_t length = boost::asio::read(*sock, boost::asio::buffer((char *)&cmd, sizeof(cmd)));
 			if (error == boost::asio::error::eof || length != sizeof(cmd))
 				break; // Connection closed cleanly by peer.
@@ -128,8 +140,9 @@ void session(socket_ptr sock)
 				(*sock).close();
 				break;
 			}
+			
 			process_command(cmd);
-
+			
 			length = sizeof(cmd);	
 			boost::asio::write(*sock, boost::asio::buffer((char *)&cmd, length));
 
@@ -157,6 +170,7 @@ void server(boost::asio::io_service& io_service, unsigned short port)
 
 void closeServer(int signum)
 {
+	//if occur SIGINT, kill dhcpd, hostapd
 	system("skill dhcpd");
 	system("skill hostapd");
 	exit(0);
