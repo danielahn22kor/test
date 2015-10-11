@@ -1,11 +1,11 @@
 #ifndef __HOSTAP_H__
 #define __HOSTAP_H__
 
-/**
+/********************
  @file hostap.h
- @date 2015/09/28
+ @date 2015/10/11
  @author 안계완
-**/
+*********************/
 
 
 
@@ -20,8 +20,8 @@
  @class hostap
  @date 2015/09/28
  @author 안계완
- @brief abstraction class of hostap for easily using hostapd
- @warning not yet exist exception handling 
+ @brief
+ 	abstraction class of hostap for easily using hostapd
 
 **/
 
