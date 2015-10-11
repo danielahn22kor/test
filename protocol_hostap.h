@@ -1,7 +1,7 @@
 #ifndef __PT_H__
 #define __PT_H__
 /********************
- @file hostap.h
+ @file protocol_hostap.h
  @date 2015/10/11
  @author 안계완
  @brief
