@@ -50,20 +50,19 @@ So, you must check 'makefile'( change the path of boost )
 
 manager and ap_agent requires root privileges to work
 
-`$ chmod +x ap_agent, privileges`
+`$ chmod +x ap_agent manager`
 
 
 
 ap_agent will be control ap's hostapd.
 
-`Usage: ap_agent [hostapd conffile path]`
+`Usage: $ ap_agent [hostapd conffile path(default: ./conf/openwinnet.conf)]`
 
 manager will be remote control to ap.
 
-`Usage: manager [ap's ip]`
-
 ```
-Usage:
+Usage: $ manager [ap's ip]
+
 Commands: 
   help or h            show this usage help    
   start                start hostap            
