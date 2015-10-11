@@ -1,3 +1,12 @@
+/********************
+ @file manager.cpp
+ @date 2015/10/11
+ @author 안계완
+ @brief Manager program
+ 	if you know AP agent's ip,
+ 	you can control AP agent
+*********************/
+
 #include <cstdlib>
 #include <cstring>
 #include <string>

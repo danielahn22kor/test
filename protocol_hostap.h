@@ -1,5 +1,14 @@
 #ifndef __PT_H__
 #define __PT_H__
+/********************
+ @file protocol_hostap.h
+ @date 2015/10/11
+ @author 안계완
+ @brief
+ 	declare message types, and ap config structure
+*********************/
+
+
 #define AGENT_PORT 12013
 
 #include <iostream>
