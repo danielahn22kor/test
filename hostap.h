@@ -75,7 +75,7 @@ public:
 private:
 	ap_config ap_conf;		//Object for save a config info
 	string confPath;		//conffile's path
-	string status;
+	string status;			//ap's status(ON OR OFF)
 };
 
 
