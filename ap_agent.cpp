@@ -1,3 +1,10 @@
+/********************
+ @file ap_agent.cpp
+ @date 2015/10/11
+ @author 안계완
+ @brief processing message from mananger program
+*********************/
+
 #include <cstdlib>
 #include <cstring>
 #include <string>
