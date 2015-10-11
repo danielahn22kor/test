@@ -1,6 +1,6 @@
 CPP = g++
 BOOSTPATH = -I /lib/boost_1_59_0 
-LDFLAGS = ./lib/libboost_system.a ./lib/libboost_thread.a -lpthread
+LDFLAGS = ./lib/ubuntu14.04/libboost_system.a ./lib/ubuntu14.04/libboost_thread.a -lpthread
 
 .SUFFIXES : .cpp .o
 .cpp.o :
