@@ -1,3 +1,10 @@
+
+/********************
+ @file hostap.cpp
+ @date 2015/10/11
+ @author 안계완
+*********************/
+
 #include "hostap.h"
 #include <boost/format.hpp>
 #include <string>
